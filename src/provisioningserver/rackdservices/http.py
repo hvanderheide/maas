@@ -15,6 +15,7 @@ import sys
 
 import attr
 from netaddr import IPAddress
+from provisioningserver.config import is_dev_environment
 from provisioningserver.events import (
     EVENT_TYPES,
     send_node_event_ip_address,
@@ -162,6 +163,8 @@ class RackHTTPService(TimerService):
         if snappy.running_in_snap():
             d.addCallback(
                 lambda _: service_monitor.restartService("http"))
+        elif is_dev_environment():
+            pass
         else:
             d.addCallback(
                 lambda _: service_monitor.reloadService("http"))
